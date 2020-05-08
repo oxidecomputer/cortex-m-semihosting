@@ -2,6 +2,8 @@
 
 use core::{fmt, slice};
 use crate::nr;
+use ufmt_write::uWrite;
+use core::convert::Infallible;
 
 /// Host's standard error
 #[derive(Clone, Copy)]
@@ -19,6 +21,15 @@ impl HStderr {
 impl fmt::Write for HStderr {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         self.write_all(s.as_bytes()).map_err(|_| fmt::Error)
+    }
+}
+
+impl uWrite for HStderr {
+    type Error = Infallible;
+
+    fn write_str(&mut self, s: &str) -> Result<(), Self::Error> {
+        let _ = self.write_all(s.as_bytes()).map_err(|_| ());
+        Ok(())
     }
 }
 
@@ -40,6 +51,16 @@ impl fmt::Write for HStdout {
         self.write_all(s.as_bytes()).map_err(|_| fmt::Error)
     }
 }
+
+impl ufmt_write::uWrite for HStdout {
+    type Error = Infallible;
+
+    fn write_str(&mut self, s: &str) -> Result<(), Self::Error> {
+        let _ = self.write_all(s.as_bytes()).map_err(|_| ());
+        Ok(())
+    }
+}
+
 
 /// Construct a new handle to the host's standard error.
 pub fn hstderr() -> Result<HStderr, ()> {

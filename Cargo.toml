@@ -19,3 +19,4 @@ jlink-quirks = []
 
 [dependencies]
 cortex-m = ">= 0.5.8, < 0.7"
+ufmt-write = "0.1.0"

@@ -28,6 +28,40 @@ macro_rules! syscall1 {
     };
 }
 
+/// Macro for writing to the HOST standard output using ufmt
+///
+/// This macro returns a `Result<(), ()>` value
+#[macro_export]
+macro_rules! uhprintln {
+    ($($tt:tt)*) => {
+        if let Ok(mut hstdout) = $crate::hio::hstdout() {
+            use ::ufmt;
+
+            let _ = ufmt::uwriteln!(hstdout, $($tt)*);
+            Ok(())
+        } else {
+            Err(())
+        }
+    };
+}
+
+/// Macro for writing to the HOST standard output using ufmt
+///
+/// This macro returns a `Result<(), ()>` value
+#[macro_export]
+macro_rules! uhprint {
+    ($($tt:tt)*) => {
+        if let Ok(mut hstdout) = $crate::hio::hstdout() {
+            use ::ufmt;
+
+            let _ = ufmt::uwrite!(hstdout, $($tt)*);
+            Ok(())
+        } else {
+            Err(())
+        }
+    };
+}
+
 /// Macro for printing to the HOST standard output
 ///
 /// This macro returns a `Result<(), ()>` value
